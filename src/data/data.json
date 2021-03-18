@@ -1,0 +1,39 @@
+[
+    {
+      "id": 1,
+      "transportName": "Bike",
+      "image": "http://placehold.it/32x32",
+      "details": {
+          "bike1" : {
+             "image" : "http://placehold.it/32x32",
+             "seat": 4,
+             "fare": 67
+          },
+          "bike2" : {
+            "image" : "http://placehold.it/32x32",
+            "seat": 4,
+            "fare": 67
+         },
+         "bike3" : {
+            "image" : "http://placehold.it/32x32",
+            "seat": 4,
+            "fare": 67
+         }
+      }
+    },
+    {
+      "id": 2,
+      "transportName": "Car",
+      "image": "http://placehold.it/32x32"
+    },
+    {
+      "id": 3,
+      "transportName": "Bus",
+      "image": "http://placehold.it/32x32"
+    },
+    {
+      "id": 4,
+      "transportName": "Train",
+      "image": "http://placehold.it/32x32"
+    }
+  ]
