@@ -14,3 +14,70 @@ body {
   width:100%;
   
 }
+
+.transport-card{
+  background: #fff;
+}
+
+.transport-card img {
+  width: auto;
+  max-height: 110px;
+  margin: 0 auto;
+  display: block;
+}
+
+.map {
+  height: 100vh;
+  width: 100%;
+}
+
+.destination-header{
+  padding:20px 10px;
+  background: rebeccapurple;
+  border-radius: 10px;;
+}
+.destination-header ul{
+  margin-bottom:0;
+  padding-left:0;
+  list-style: none;
+}
+.destination-header ul li{
+  color:#fff;
+}
+
+.rider-container{
+  background: #ddd;
+  padding:15px;
+  border-radius: 10px;
+}
+
+.rider{
+  padding:15px;
+  background-color:#fff;
+  border-radius: 10px;
+  margin:10px 0;
+}
+
+.rider-image{
+  width:35%;
+}
+
+.name{
+  width:25%;
+}
+
+.seat{
+  width:25%;
+  text-align:right;
+}
+
+.fare{
+  width:25%;
+  text-align: right;
+}
+
+.form-container{
+  background: #ddd;
+  padding:20px 15px;
+  border-radius: 10px;;
+}

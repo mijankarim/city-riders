@@ -1,39 +1,114 @@
 [
-    {
-      "id": 1,
-      "transportName": "Bike",
-      "image": "http://placehold.it/32x32",
-      "details": {
-          "bike1" : {
-             "image" : "http://placehold.it/32x32",
-             "seat": 4,
-             "fare": 67
-          },
-          "bike2" : {
-            "image" : "http://placehold.it/32x32",
-            "seat": 4,
-            "fare": 67
-         },
-         "bike3" : {
-            "image" : "http://placehold.it/32x32",
-            "seat": 4,
-            "fare": 67
-         }
+  {
+    "id": 1,
+    "name": "Bike",
+    "image": "https://i.ibb.co/100XPCQ/bike.png",
+    "allTransports": [
+      {
+        "id": 1,
+        "name": "Bike",
+        "image": "https://i.ibb.co/100XPCQ/bike.png",
+        "seat": 1,
+        "fare": 20
+      },
+      {
+        "id": 2,
+        "name": "Bike",
+        "image": "https://i.ibb.co/100XPCQ/bike.png",
+        "seat": 1,
+        "fare": 20
+      },
+      {
+        "id": 3,
+        "name": "Bike",
+        "image": "https://i.ibb.co/100XPCQ/bike.png",
+        "seat": 1,
+        "fare": 20
       }
-    },
-    {
-      "id": 2,
-      "transportName": "Car",
-      "image": "http://placehold.it/32x32"
-    },
-    {
-      "id": 3,
-      "transportName": "Bus",
-      "image": "http://placehold.it/32x32"
-    },
-    {
-      "id": 4,
-      "transportName": "Train",
-      "image": "http://placehold.it/32x32"
-    }
-  ]
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Car",
+    "image": "https://i.ibb.co/bzxMT2v/car.png",
+    "allTransports": [
+      {
+        "id": 1,
+        "name": "Car",
+        "image": "https://i.ibb.co/bzxMT2v/car.png",
+        "seat": 4,
+        "fare": 67
+      },
+      {
+        "id": 2,
+        "name": "Car",
+        "image": "https://i.ibb.co/bzxMT2v/car.png",
+        "seat": 4,
+        "fare": 67
+      },
+      {
+        "id": 3,
+        "name": "Car",
+        "image": "https://i.ibb.co/bzxMT2v/car.png",
+        "seat": 4,
+        "fare": 67
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Bus",
+    "image": "https://i.ibb.co/TkXsTBj/bus.png",
+    "allTransports": [
+      {
+        "id": 1,
+        "name": "Bus",
+        "image": "https://i.ibb.co/TkXsTBj/bus.png",
+        "seat": 5,
+        "fare": 27
+      },
+      {
+        "id": 2,
+        "name": "Bus",
+        "image": "https://i.ibb.co/TkXsTBj/bus.png",
+        "seat": 5,
+        "fare": 27
+      },
+      {
+        "id": 3,
+        "name": "Bus",
+        "image": "https://i.ibb.co/TkXsTBj/bus.png",
+        "seat": 5,
+        "fare": 27
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Train",
+    "image": "https://i.ibb.co/ZXpSCCd/train.png",
+    "allTransports": [
+      {
+        "id": 1,
+        "name": "Train",
+        "image": "https://i.ibb.co/ZXpSCCd/train.png",
+        "seat": 2,
+        "fare": 30
+      },
+      {
+        "id": 2,
+        "name": "Train",
+        "image": "https://i.ibb.co/ZXpSCCd/train.png",
+        "seat": 2,
+        "fare": 30
+      },
+      {
+        "id": 3,
+        "name": "Train",
+        "image": "https://i.ibb.co/ZXpSCCd/train.png",
+        "seat": 2,
+        "fare": 30
+      }
+    ]
+  }
+]
