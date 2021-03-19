@@ -1,11 +1,18 @@
-import React, { useState } from "react";
-import firebase from "firebase/app";
-import "firebase/auth";
-import firebaseConfig from "./firebase.config";
+import React, { useState, useContext } from "react";
+
 import { Form, Button } from "react-bootstrap";
+import { UserContext } from "../../App";
+import { useHistory, useLocation } from "react-router";
+import {
+  handleGoogleSignIn,
+  initializeLoginFramework,
+  handleFbSignIn,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "./loginManager";
 
 const Login = () => {
-  const [newUser, SetNewUser] = useState(true);
+  const [newUser, SetNewUser] = useState(false);
   const [user, setUser] = useState({
     isSignedIn: false,
     name: "",
@@ -15,13 +22,32 @@ const Login = () => {
     success: false,
     error: "",
   });
+  initializeLoginFramework();
+  const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+  const history = useHistory();
+  const location = useLocation();
 
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
+  const { from } = location.state || { from: { pathname: "/" } };
 
-  const googleProvider = new firebase.auth.GoogleAuthProvider();
-  const fbProvider = new firebase.auth.FacebookAuthProvider();
+  const googleSignIn = () => {
+    handleGoogleSignIn().then((res) => {
+        handleResponse(res, true);
+    });
+  };
+
+  const fbSignIn = () => {
+    handleFbSignIn().then((res) => {
+        handleResponse(res, true);
+    });
+  };
+
+  const handleResponse = (res, redirect) => {
+    setUser(res);
+    setLoggedInUser(res);
+    if (redirect) {
+      history.replace(from);
+    }
+  };
 
   const handleBlur = (e) => {
     let isFieldValid = true;
@@ -42,85 +68,19 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     if (newUser && user.email && user.password) {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(user.email, user.password)
-        .then((res) => {
-          const newUserInfo = { ...user };
-          newUserInfo.error = "";
-          newUserInfo.success = true;
-          setUser(newUserInfo);
-          updateUserName(user.name);
-        })
-        .catch((error) => {
-          const newUserInfo = { ...user };
-          newUserInfo.error = error.message;
-          newUserInfo.success = false;
-          setUser(newUserInfo);
-          console.log(error.message);
-        });
+      createUserWithEmailAndPassword(user.name, user.email, user.password).then(
+        (res) => {
+            handleResponse(res, true);
+        }
+      );
     }
 
     if (!newUser && user.email && user.password) {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(user.email, user.password)
-        .then((res) => {
-          const newUserInfo = { ...user };
-          newUserInfo.error = "";
-          newUserInfo.success = true;
-          setUser(newUserInfo);
-        })
-        .catch((error) => {
-          const newUserInfo = { ...user };
-          newUserInfo.error = error.message;
-          newUserInfo.success = false;
-          setUser(newUserInfo);
-          console.log(error.message);
-        });
+      signInWithEmailAndPassword(user.email, user.password).then((res) => {
+        handleResponse(res, true);
+      });
     }
     e.preventDefault();
-  };
-
-  const handleGoogleSignIn = () => {
-    firebase
-      .auth()
-      .signInWithPopup(googleProvider)
-      .then((result) => {
-        var user = result.user;
-        console.log(user);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleFbSignIn = () => {
-    firebase
-      .auth()
-      .signInWithPopup(fbProvider)
-      .then((result) => {
-        const user = result.user;
-        console.log(user.displayName);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const updateUserName = (name) => {
-    var user = firebase.auth().currentUser;
-
-    user
-      .updateProfile({
-        displayName: name,
-      })
-      .then(() => {
-        console.log("User name updated successfully");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   };
 
   return (
@@ -196,11 +156,11 @@ const Login = () => {
       </div>
 
       <div className="text-center my-3">
-        <button onClick={handleGoogleSignIn}>Login Using Google</button>
+        <button onClick={googleSignIn}>Login Using Google</button>
       </div>
 
       <div className="text-center my-3">
-        <button onClick={handleFbSignIn}>Login Using FaceBook</button>
+        <button onClick={fbSignIn}>Login Using FaceBook</button>
       </div>
     </div>
   );

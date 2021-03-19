@@ -1,8 +1,12 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Navbar, Nav } from "react-bootstrap";
+import { UserContext } from "../../App";
+
 
 const Header = () => {
+  const [loggedInUser] = useContext(UserContext);
+  console.log(loggedInUser)
   return (
     <div>
       <Container>
@@ -17,7 +21,7 @@ const Header = () => {
                   <Link to="/destination">Destination</Link>
                   <Link to="/blog">Blog</Link>
                   <Link to="/contact">Contact</Link>
-                  <Link to="/login">Login</Link>
+                  <Link to="/login">{loggedInUser.email ? `${loggedInUser.email}`: "Login"}</Link>
                 </Nav>
               </Navbar.Collapse>
             </Navbar>
