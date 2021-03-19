@@ -29,21 +29,6 @@ export const handleGoogleSignIn = () => {
     });
 };
 
-export const handleFbSignIn = () => {
-  const fbProvider = new firebase.auth.FacebookAuthProvider();
-  return firebase
-    .auth()
-    .signInWithPopup(fbProvider)
-    .then((res) => {
-      const user = res.user;
-      user.success = true;
-      return user;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
 export const createUserWithEmailAndPassword = (name, email, password) => {
   return firebase
     .auth()

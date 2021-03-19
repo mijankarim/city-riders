@@ -6,7 +6,6 @@ import { useHistory, useLocation } from "react-router";
 import {
   handleGoogleSignIn,
   initializeLoginFramework,
-  handleFbSignIn,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "./loginManager";
@@ -35,11 +34,6 @@ const Login = () => {
     });
   };
 
-  const fbSignIn = () => {
-    handleFbSignIn().then((res) => {
-        handleResponse(res, true);
-    });
-  };
 
   const handleResponse = (res, redirect) => {
     setUser(res);
@@ -159,9 +153,7 @@ const Login = () => {
         <button onClick={googleSignIn}>Login Using Google</button>
       </div>
 
-      <div className="text-center my-3">
-        <button onClick={fbSignIn}>Login Using FaceBook</button>
-      </div>
+    
     </div>
   );
 };
