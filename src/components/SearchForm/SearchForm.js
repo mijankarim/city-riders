@@ -8,7 +8,7 @@ const SearchForm = (props) => {
         e.preventDefault();
         props.handleSearch();
       }}
-      className="form-container"
+      className="search-form-container"
     >
       <Form.Group controlId="formBasicPickFrom">
         <Form.Label>Pick From</Form.Label>
@@ -20,7 +20,7 @@ const SearchForm = (props) => {
         <Form.Control type="text" placeholder="Agrabad" />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button className="city-btn full-width-btn" type="submit">
         Search
       </Button>
     </Form>

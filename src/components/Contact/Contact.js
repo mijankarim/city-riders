@@ -1,10 +1,18 @@
-import React from 'react'
+import React from 'react';
+import {Container, Row, Col} from 'react-bootstrap';
 
 const Contact = () => {
     return (
-        <div>
-            Contact page
-        </div>
+        <Container>
+            <Row>
+                <Col  className="text-light">
+                <h2>Contact Us</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos porro laboriosam optio maiores, officia expedita iure, aliquam, beatae reiciendis perspiciatis error. Rerum, eligendi enim ex ea debitis repudiandae vitae maxime!</p>
+                </Col>
+            </Row>
+        </Container>
+          
+       
     )
 }
 

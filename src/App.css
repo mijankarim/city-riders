@@ -1,15 +1,31 @@
+
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif !important;
+  background: #6c63ff  url(./assets/images/bg-main.png) center bottom no-repeat !important;
+  
+  min-height:100vh;
 }
 
 
 .navbar-nav a{
-  color:#000;
+  color:#fff;
   padding:0 20px;
 }
 
+.navbar-nav a:hover, .navbar-brand a:hover{
+  color: #ff6584;
+  text-decoration: none;
+}
+
+.navbar-brand a{
+  color:#fff;
+  font-size:30px !important;
+  font-weight:bold;
+}
+
 .form-container{
+  background:#fff;
   max-width:350px;
   width:100%;
   
@@ -17,6 +33,7 @@ body {
 
 .transport-card{
   background: #fff;
+  cursor:pointer;
 }
 
 .transport-card img {
@@ -33,7 +50,7 @@ body {
 
 .destination-header{
   padding:20px 10px;
-  background: rebeccapurple;
+  background: #ff6584;
   border-radius: 10px;;
 }
 .destination-header ul{
@@ -46,7 +63,7 @@ body {
 }
 
 .rider-container{
-  background: #ddd;
+  background: #efefef;
   padding:15px;
   border-radius: 10px;
 }
@@ -76,8 +93,18 @@ body {
   text-align: right;
 }
 
-.form-container{
-  background: #ddd;
+.search-form-container{
+  background: #efefef;
   padding:20px 15px;
   border-radius: 10px;;
+}
+
+.city-btn{
+  background:#ff6584 !important;
+  color:#fff !important;
+  border-color: #ff6584 !important;
+}
+
+.full-width-btn{
+  width:100%;
 }

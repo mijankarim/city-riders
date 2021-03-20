@@ -80,7 +80,7 @@ const Login = () => {
   return (
     <div className="form-container mx-auto border border-dark px-4 py-4 my-4">
       <h3 className="mb-3 text-center">
-        {newUser ? "Create an account" : "Sign In"}
+        {newUser ? "Create an account" : "Login"}
       </h3>
 
       <Form onSubmit={handleSubmit}>
@@ -127,7 +127,7 @@ const Login = () => {
           </Form.Group>
         )}
 
-        <Button variant="primary" type="submit">
+        <Button className="city-btn full-width-btn" type="submit">
           {newUser ? "Create an account" : "Sign In"}
         </Button>
       </Form>

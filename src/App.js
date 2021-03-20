@@ -21,9 +21,7 @@ function App() {
           <Route exact path="/">
             <Transports />
           </Route>
-          <PrivateRoute path="/destination">
-            <Destination />
-          </PrivateRoute>
+         
           <Route path="/blog">
             <Blog />
           </Route>
@@ -33,9 +31,9 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/transport/:idTransport">
+          <PrivateRoute path="/transport/:idTransport">
             <Destination />
-          </Route>
+          </PrivateRoute>
         </Switch>
       </Router>
     </UserContext.Provider>

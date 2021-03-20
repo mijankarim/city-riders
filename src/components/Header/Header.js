@@ -9,11 +9,11 @@ const Header = () => {
   console.log(loggedInUser)
   return (
     <div>
-      <Container>
+      <Container className="mb-5 py-4">
         <Row>
           <Col>
-            <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
-              <Navbar.Brand>City Riders</Navbar.Brand>
+            <Navbar collapseOnSelect expand="lg" variant="dark">
+              <Navbar.Brand><Link to="/">City Riders</Link></Navbar.Brand>
               <Navbar.Toggle aria-controls="responsive-navbar-nav" />
               <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="ml-auto d-flex justify-content-center">
