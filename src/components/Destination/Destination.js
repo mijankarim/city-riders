@@ -27,7 +27,7 @@ const Destination = () => {
           ) : (
             <div className="rider-container">
               <div className="destination-header">
-                <ul>
+                <ul className="timeline">
                   <li>Muradpur</li>
                   <li>Agrabad</li>
                 </ul>

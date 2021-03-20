@@ -26,7 +26,7 @@ body {
 
 .form-container{
   background:#fff;
-  max-width:350px;
+  max-width:390px;
   width:100%;
   
 }
@@ -103,8 +103,29 @@ body {
   background:#ff6584 !important;
   color:#fff !important;
   border-color: #ff6584 !important;
+  border-radius: .25rem;
 }
 
 .full-width-btn{
   width:100%;
+}
+
+.google-btn{
+  width: 100%;
+  border-radius: 25px;
+  padding: 5px;
+  background:#fff;
+  border:1px solid #1a1a1a;
+  margin-top:10px;
+}
+
+.google-icon{
+  float: left;
+  margin:3px 3px 3px 3px;
+}
+
+.signin-link{
+  color: #ff6584;
+  text-decoration: underline !important;
+  background-color: #fff !important;
 }

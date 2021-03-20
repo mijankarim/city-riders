@@ -53,16 +53,19 @@ export const signInWithEmailAndPassword = (email, password) => {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then((res) => {
-      const newUserInfo = res.user;
+      const newUserInfo = { ...res.user };
       newUserInfo.error = "";
       newUserInfo.success = true;
+      updateUserName(res.user.displayName);
       return newUserInfo;
     })
-    .catch((error) => {
+    .catch((error) => { 
       const newUserInfo = {};
       newUserInfo.error = error.message;
       newUserInfo.success = false;
+      console.log(newUserInfo);
       return newUserInfo;
+      
     });
 };
 

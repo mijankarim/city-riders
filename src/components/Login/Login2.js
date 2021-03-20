@@ -1,14 +1,10 @@
 import React, { useState, useContext } from "react";
-
+import firebase from "firebase/app";
+import "firebase/auth";
+import firebaseConfig from "./firebase.config";
 import { Form, Button } from "react-bootstrap";
 import { UserContext } from "../../App";
 import { useHistory, useLocation } from "react-router";
-import {
-  handleGoogleSignIn,
-  initializeLoginFramework,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "./loginManager";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
@@ -23,27 +19,18 @@ const Login = () => {
     success: false,
     error: "",
   });
-  initializeLoginFramework();
+
+  if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
   const history = useHistory();
   const location = useLocation();
+  console.log(location)
   const { from } = location.state || { from: { pathname: "/" } };
 
-  const googleSignIn = () => {
-    handleGoogleSignIn().then((res) => {
-        handleResponse(res, true);
-        console.log(user)
-    });
-  };
-
-
-  const handleResponse = (res, redirect) => {
-    setUser(res);
-    setLoggedInUser(res);
-    if (redirect) {
-      history.replace(from);
-    }
-  };
+  const googleProvider = new firebase.auth.GoogleAuthProvider();
 
   const handleBlur = (e) => {
     let isFieldValid = true;
@@ -63,28 +50,82 @@ const Login = () => {
   };
 
   const handleSubmit = (e) => {
-
     if (newUser && user.email && user.password) {
-      createUserWithEmailAndPassword(user.name, user.email, user.password).then(
-        (res) => {
-            handleResponse(res, true);
-        }
-      );
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(user.email, user.password)
+        .then((res) => {
+          const newUserInfo = { ...user };
+          newUserInfo.error = "";
+          newUserInfo.success = true;
+          setUser(newUserInfo);
+          updateUserName(user.name);
+          history.replace(from);
+        })
+        .catch((error) => {
+          const newUserInfo = { ...user };
+          newUserInfo.error = error.message;
+          newUserInfo.success = false;
+          setUser(newUserInfo);
+          console.log(error.message);
+        });
     }
 
     if (!newUser && user.email && user.password) {
-      signInWithEmailAndPassword(user.email, user.password).then((res) => {
-        handleResponse(res, true);
-        console.log(user)
-      });
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(user.email, user.password)
+        .then((res) => {
+          const newUserInfo = { ...user };
+          newUserInfo.error = "";
+          newUserInfo.success = true;
+          setUser(newUserInfo);
+          history.replace(from);
+        })
+        .catch((error) => {
+          const newUserInfo = { ...user };
+          newUserInfo.error = error.message;
+          newUserInfo.success = false;
+          setUser(newUserInfo);
+          console.log(error.message);
+        });
     }
     e.preventDefault();
+  };
+
+  const handleGoogleSignIn = () => {
+    firebase
+      .auth()
+      .signInWithPopup(googleProvider)
+      .then((result) => {
+        var user = result.user;
+        history.replace(from);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+
+  const updateUserName = (name) => {
+    var user = firebase.auth().currentUser;
+
+    user
+      .updateProfile({
+        displayName: name,
+      })
+      .then(() => {
+        console.log("User name updated successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
     <div className="form-container mx-auto border border-dark px-4 py-4 my-4">
       <h3 className="mb-3 text-center">
-        {newUser ? "Create an account" : "Login"}
+        {newUser ? "Create an account" : "Sign In"}
       </h3>
 
       <Form onSubmit={handleSubmit}>
@@ -154,7 +195,7 @@ const Login = () => {
       </div>
 
       <div className="text-center my-3">
-        <button onClick={googleSignIn} className="google-btn"><FontAwesomeIcon className="google-icon" icon={faGoogle}/> Continue With Google</button>
+        <button onClick={handleGoogleSignIn} className="google-btn"><FontAwesomeIcon className="google-icon" icon={faGoogle}/> Continue With Google</button>
       </div>
 
     
