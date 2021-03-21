@@ -179,7 +179,7 @@ const Login = () => {
       )}
 
       <div className="text-center mt-3">
-        {newUser ? "Already have an account?" : "Don't have an account"}
+        {newUser ? "Already have an account?" : "Don't have an account?"}
         <button
           className="text-decoration-underline border-0 signin-link"
           onClick={() => SetNewUser(!newUser)}
@@ -187,8 +187,8 @@ const Login = () => {
           {newUser ? "Login" : "Create an account"}
         </button>
       </div>
-
-      <div className="text-center my-3">
+       <div><p className="text-center mt-3 mb-0">Or</p></div>
+      <div className="text-center my-2">
         <button onClick={googleSignIn} className="google-btn">
           <FontAwesomeIcon className="google-icon" icon={faGoogle} /> Continue
           With Google
