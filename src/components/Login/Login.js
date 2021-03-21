@@ -1,16 +1,16 @@
 import React, { useState, useContext } from "react";
-
 import { Form, Button } from "react-bootstrap";
 import { UserContext } from "../../App";
-import { useHistory, useLocation } from "react-router";
-import {
-  handleGoogleSignIn,
-  initializeLoginFramework,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "./loginManager";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import firebase from "firebase/app";
+import "firebase/auth";
+import firebaseConfig from "./firebase.config";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { useHistory, useLocation } from "react-router";
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 const Login = () => {
   const [newUser, SetNewUser] = useState(false);
@@ -23,62 +23,138 @@ const Login = () => {
     success: false,
     error: "",
   });
-  initializeLoginFramework();
+
+  const [validation, setValidation] = useState({
+    emailValidation: "",
+    passwordValidation: "",
+  });
+
   const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+
   const history = useHistory();
   const location = useLocation();
   const { from } = location.state || { from: { pathname: "/" } };
 
-  const googleSignIn = () => {
-    handleGoogleSignIn().then((res) => {
-        handleResponse(res, true);
-        console.log(user)
-    });
+  const handleSubmit = (e) => {
+    if (newUser && user.email && user.password) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(user.email, user.password)
+        .then((res) => {
+          const newUserInfo = { ...user };
+          newUserInfo.error = "";
+          newUserInfo.success = true;
+          setUser(newUserInfo);
+          updateUserName(user.name);
+        })
+        .catch((error) => {
+          const newUserInfo = { ...user };
+          newUserInfo.error = error.message;
+          newUserInfo.success = false;
+          setUser(newUserInfo);
+        });
+    }
+
+    if (!newUser && user.email && user.password) {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(user.email, user.password)
+        .then((res) => {
+          const newUserInfo = { ...user };
+          newUserInfo.name = res.user.displayName;
+          newUserInfo.error = "";
+          newUserInfo.success = true;
+          setUser(newUserInfo);
+          setLoggedInUser(newUserInfo);
+          history.replace(from);
+          console.log("Sign in info", res.user);
+        })
+        .catch((error) => {
+          const newUserInfo = { ...user };
+          newUserInfo.error = error.message;
+          newUserInfo.success = false;
+          setUser(newUserInfo);
+        });
+    }
+
+    e.preventDefault();
   };
 
+  const updateUserName = (name) => {
+    const user = firebase.auth().currentUser;
+    user
+      .updateProfile({
+        displayName: name,
+      })
+      .then(() => {
+        console.log("User name Updated successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  const handleResponse = (res, redirect) => {
-    setUser(res);
-    setLoggedInUser(res);
-    if (redirect) {
-      history.replace(from);
-    }
+  const handleGoogleSignIn = () => {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then((res) => {
+        const { displayName, email } = res.user;
+        const signedInUser = {
+          isSignedIn: true,
+          name: displayName,
+          email: email,
+        };
+        setUser(signedInUser);
+        setLoggedInUser(signedInUser);
+        history.replace(from);
+      })
+      .catch((error) => {
+        const signedInUser = {
+          isSignedIn: false,
+          name: "",
+          email: "",
+        };
+        setUser(signedInUser);
+      });
   };
 
   const handleBlur = (e) => {
     let isFieldValid = true;
     if (e.target.name === "email") {
-      isFieldValid = /\S+@\S+\.\S/.test(e.target.value);
+      const isFieldValid = /\S+@\S+\.\S+/.test(e.target.value);
+      if (!isFieldValid && e.target.value) {
+        const newValidation = { ...validation };
+        newValidation.email = "Email Is Not Valid";
+        setValidation(newValidation);
+      } else {
+        const newValidation = { ...validation };
+        newValidation.email = "";
+        setValidation(newValidation);
+      }
     }
     if (e.target.name === "password") {
       const isPasswordValid = e.target.value.length > 6;
       const passwordHasNumber = /\d{1}/.test(e.target.value);
       isFieldValid = isPasswordValid && passwordHasNumber;
+      if (!isFieldValid && e.target.value) {
+        const newValidation = { ...validation };
+        newValidation.password =
+          "Password should more than 6 Characters and has at least one number";
+        setValidation(newValidation);
+      } else {
+        const newValidation = { ...validation };
+        newValidation.password = "";
+        setValidation(newValidation);
+      }
     }
+
     if (isFieldValid) {
       const newUserInfo = { ...user };
       newUserInfo[e.target.name] = e.target.value;
       setUser(newUserInfo);
     }
-  };
-
-  const handleSubmit = (e) => {
-
-    if (newUser && user.email && user.password) {
-      createUserWithEmailAndPassword(user.name, user.email, user.password).then(
-        (res) => {
-            handleResponse(res, true);
-        }
-      );
-    }
-
-    if (!newUser && user.email && user.password) {
-      signInWithEmailAndPassword(user.email, user.password).then((res) => {
-        handleResponse(res, true);
-        console.log(user)
-      });
-    }
-    e.preventDefault();
   };
 
   return (
@@ -107,6 +183,7 @@ const Login = () => {
             placeholder="Email"
             required
           />
+          { validation.email && <p className="text-danger mt-3 text-center">{validation.email}</p>}
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">
@@ -117,6 +194,7 @@ const Login = () => {
             placeholder="Password"
             required
           />
+          { validation.password && <p className="text-danger mt-3 text-center">{validation.password}</p>}
         </Form.Group>
 
         {newUser && (
@@ -135,14 +213,17 @@ const Login = () => {
           {newUser ? "Create an account" : "Sign In"}
         </Button>
       </Form>
+
       {user.error && (
         <p className="text-danger mt-3 text-center">{user.error}</p>
       )}
+
       {user.success && (
         <p className="text-success mt-3 text-center">
           User {newUser ? "Created" : "Logged In"} Successfully
         </p>
       )}
+
       <div className="text-center mt-3">
         {newUser ? "Already have an account?" : "Don't have an account"}
         <button
@@ -154,10 +235,11 @@ const Login = () => {
       </div>
 
       <div className="text-center my-3">
-        <button onClick={googleSignIn} className="google-btn"><FontAwesomeIcon className="google-icon" icon={faGoogle}/> Continue With Google</button>
+        <button onClick={handleGoogleSignIn} className="google-btn">
+          <FontAwesomeIcon className="google-icon" icon={faGoogle} /> Continue
+          With Google
+        </button>
       </div>
-
-    
     </div>
   );
 };

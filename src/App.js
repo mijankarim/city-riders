@@ -4,7 +4,6 @@ import Destination from "./components/Destination/Destination";
 import Blog from "./components/Blog/Blog";
 import Contact from "./components/Contact/Contact";
 import Login from "./components/Login/Login";
-import Login2 from "./components/Login/Login2";
 import Header from "./components/Header/Header";
 import { useState, createContext } from "react";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";

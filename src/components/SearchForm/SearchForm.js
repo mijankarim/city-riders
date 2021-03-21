@@ -12,12 +12,12 @@ const SearchForm = (props) => {
     >
       <Form.Group controlId="formBasicPickFrom">
         <Form.Label>Pick From</Form.Label>
-        <Form.Control type="text" placeholder="Muradpur" />
+        <Form.Control type="text" name="pickFrom" placeholder="Muradpur" />
       </Form.Group>
 
       <Form.Group controlId="formBasicPickTo">
         <Form.Label>Pick To</Form.Label>
-        <Form.Control type="text" placeholder="Agrabad" />
+        <Form.Control type="text" name="pickTo" placeholder="Agrabad" />
       </Form.Group>
 
       <Form.Group controlId="date">

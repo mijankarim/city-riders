@@ -7,7 +7,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
   const [loggedInUser] = useContext(UserContext);
-  const { displayName: name, email } = loggedInUser;
+  const { name,  email } = loggedInUser;
   return (
     <div>
       <Container className="mb-5 py-4">

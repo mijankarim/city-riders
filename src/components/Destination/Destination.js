@@ -9,6 +9,7 @@ import SearchForm from "../SearchForm/SearchForm";
 const Destination = () => {
   const { idTransport } = useParams();
   const [riders, setRiders] = useState([]);
+  const [destination, setDestination] = useState({});
   const transportData = transportsData.find(
     (t) => t.id === parseInt(idTransport)
   );
