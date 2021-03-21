@@ -136,11 +136,12 @@ const Login = () => {
           )}
         </Form.Group>
 
-        <Form.Group controlId="formBasicPassword">
+        <Form.Group>
           <Form.Control
             onBlur={handleBlur}
             type="password"
             name="password"
+            id="password"
             placeholder="Password"
             required
           />
@@ -152,11 +153,12 @@ const Login = () => {
         </Form.Group>
 
         {newUser && (
-          <Form.Group controlId="formBasicPasswordConfirm">
+          <Form.Group>
             <Form.Control
               onBlur={handleBlur}
               type="password"
-              name="confirmpassword"
+              id="confirmPassword"
+              name="confirmPassword"
               placeholder="Confirm Password"
               required
             />

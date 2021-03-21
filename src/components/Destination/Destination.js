@@ -4,6 +4,9 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import Map from "../Map/Map";
 import transportsData from "../../data/data.json";
 import Rider from "../Rider/Rider";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowsAltV } from "@fortawesome/free-solid-svg-icons";
+
 
 const Destination = () => {
   const { idTransport } = useParams();
@@ -30,7 +33,7 @@ const Destination = () => {
       <Row>
         <Col xs={12} md={4}>
           {!showRiders ? (
-            <Form onSubmit={handleSearch} className="search-form-container">
+            <Form onSubmit={handleSearch} className="search-form-container mb-4">
               <Form.Group controlId="formBasicPickFrom">
                 <Form.Label>Pick From</Form.Label>
                 <Form.Control
@@ -76,7 +79,7 @@ const Destination = () => {
                   <div>
                     <strong>{pickFrom}</strong>
                   </div>
-                  <div>To</div>
+                  <div><FontAwesomeIcon icon={faArrowsAltV}/></div>
                   <div>
                     <strong>{pickTo}</strong>
                   </div>
