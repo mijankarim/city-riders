@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, {useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import Map from "../Map/Map";
@@ -8,22 +8,32 @@ import SearchForm from "../SearchForm/SearchForm";
 
 const Destination = () => {
   const { idTransport } = useParams();
+  const [showRiders, setShowRiders] = useState(false);
   const [riders, setRiders] = useState([]);
   const [destination, setDestination] = useState({});
   const transportData = transportsData.find(
     (t) => t.id === parseInt(idTransport)
   );
   const { allTransports } = transportData;
+  
+  useEffect(() => {
+    setRiders(allTransports);
+  },[allTransports]) 
+  
 
   const handleSearch = () => {
-    setRiders(allTransports);
+    setShowRiders(true);
   };
+
+  const handleOnchange = (e) => {
+    setDestination({ "e.target.name": e.target.value})
+  }
 
   return (
     <Container className="my-5">
       <Row>
         <Col xs={12} md={4}>
-          {!riders.length ? (
+          {!showRiders ? (
             <SearchForm handleSearch={handleSearch} />
           ) : (
             <div className="rider-container">
