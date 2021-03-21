@@ -1,16 +1,18 @@
 import React, { useState, useContext } from "react";
 import { Form, Button } from "react-bootstrap";
 import { UserContext } from "../../App";
-import firebase from "firebase/app";
-import "firebase/auth";
-import firebaseConfig from "./firebase.config";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useHistory, useLocation } from "react-router";
+import {
+  createUserWithEmailAndPassword,
+  handleGoogleSignIn,
+  initializeLoginFramework,
+  signInWithEmailandPassword,
+} from "./loginManager";
 
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig);
-}
+initializeLoginFramework();
 
 const Login = () => {
   const [newUser, SetNewUser] = useState(false);
@@ -37,87 +39,33 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     if (newUser && user.email && user.password) {
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(user.email, user.password)
-        .then((res) => {
-          const newUserInfo = { ...user };
-          newUserInfo.error = "";
-          newUserInfo.success = true;
-          setUser(newUserInfo);
-          updateUserName(user.name);
-        })
-        .catch((error) => {
-          const newUserInfo = { ...user };
-          newUserInfo.error = error.message;
-          newUserInfo.success = false;
-          setUser(newUserInfo);
-        });
+      createUserWithEmailAndPassword(user.name, user.email, user.password).then(
+        (res) => {
+          handleResponse(res, false);
+        }
+      );
     }
 
     if (!newUser && user.email && user.password) {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(user.email, user.password)
-        .then((res) => {
-          const newUserInfo = { ...user };
-          newUserInfo.name = res.user.displayName;
-          newUserInfo.error = "";
-          newUserInfo.success = true;
-          setUser(newUserInfo);
-          setLoggedInUser(newUserInfo);
-          history.replace(from);
-          console.log("Sign in info", res.user);
-        })
-        .catch((error) => {
-          const newUserInfo = { ...user };
-          newUserInfo.error = error.message;
-          newUserInfo.success = false;
-          setUser(newUserInfo);
-        });
+      signInWithEmailandPassword(user.email, user.password).then((res) => {
+        handleResponse(res, true);
+      });
     }
-
     e.preventDefault();
   };
 
-  const updateUserName = (name) => {
-    const user = firebase.auth().currentUser;
-    user
-      .updateProfile({
-        displayName: name,
-      })
-      .then(() => {
-        console.log("User name Updated successfully");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const googleSignIn = () => {
+    handleGoogleSignIn().then((res) => {
+      handleResponse(res, true);
+    });
   };
 
-  const handleGoogleSignIn = () => {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then((res) => {
-        const { displayName, email } = res.user;
-        const signedInUser = {
-          isSignedIn: true,
-          name: displayName,
-          email: email,
-        };
-        setUser(signedInUser);
-        setLoggedInUser(signedInUser);
-        history.replace(from);
-      })
-      .catch((error) => {
-        const signedInUser = {
-          isSignedIn: false,
-          name: "",
-          email: "",
-        };
-        setUser(signedInUser);
-      });
+  const handleResponse = (res, redirect) => {
+    setUser(res);
+    setLoggedInUser(res);
+    if (redirect) {
+      history.replace(from);
+    }
   };
 
   const handleBlur = (e) => {
@@ -183,7 +131,9 @@ const Login = () => {
             placeholder="Email"
             required
           />
-          { validation.email && <p className="text-danger mt-3 text-center">{validation.email}</p>}
+          {validation.email && (
+            <p className="text-danger mt-3 text-center">{validation.email}</p>
+          )}
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">
@@ -194,7 +144,11 @@ const Login = () => {
             placeholder="Password"
             required
           />
-          { validation.password && <p className="text-danger mt-3 text-center">{validation.password}</p>}
+          {validation.password && (
+            <p className="text-danger mt-3 text-center">
+              {validation.password}
+            </p>
+          )}
         </Form.Group>
 
         {newUser && (
@@ -235,7 +189,7 @@ const Login = () => {
       </div>
 
       <div className="text-center my-3">
-        <button onClick={handleGoogleSignIn} className="google-btn">
+        <button onClick={googleSignIn} className="google-btn">
           <FontAwesomeIcon className="google-icon" icon={faGoogle} /> Continue
           With Google
         </button>
